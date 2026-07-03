@@ -13,10 +13,12 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    // Injects the authentication service into the controller.
     public function __construct(
         protected AuthService $authService
     ) {}
 
+    // Authenticates the user and returns their profile with an access token.
     public function login(LoginRequest $request): JsonResponse
     {
         $result = $this->authService->login($request->validated());
@@ -30,6 +32,7 @@ class AuthController extends Controller
         );
     }
 
+    // Returns the authenticated user's profile information.
     public function me(Request $request): JsonResponse
     {
         $user = $this->authService->me($request->user());
@@ -40,6 +43,7 @@ class AuthController extends Controller
         );
     }
 
+    // Logs out the authenticated user by revoking their access tokens.
     public function logout(Request $request)
     {
         $this->authService->logout($request->user());
@@ -50,6 +54,7 @@ class AuthController extends Controller
         ], 200);
     }
 
+    // Changes the authenticated user's password after validation.
     public function changePassword(ChangePasswordRequest $request)
     {
         $this->authService->changePassword(

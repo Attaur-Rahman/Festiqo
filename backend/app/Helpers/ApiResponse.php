@@ -6,27 +6,39 @@ use Illuminate\Http\JsonResponse;
 
 class ApiResponse
 {
+    // Returns a standardized JSON response for successful API requests.
     public static function success(
         mixed $data = null,
         string $message = 'Success',
         int $status = 200
     ): JsonResponse {
-        return response()->json([
+        $response = [
             'success' => true,
             'message' => $message,
-            'data' => $data,
-        ], $status);
+        ];
+
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+
+        return response()->json($response, $status);
     }
 
+    // Returns a standardized JSON response for failed API requests.
     public static function error(
-        string $message = 'Something went wrong.',
-        mixed $errors = null,
-        int $status = 400
+        string $message,
+        int $status = 400,
+        ?array $errors = null
     ): JsonResponse {
-        return response()->json([
+        $response = [
             'success' => false,
             'message' => $message,
-            'errors' => $errors,
-        ], $status);
+        ];
+
+        if (! empty($errors)) {
+            $response['errors'] = $errors;
+        }
+
+        return response()->json($response, $status);
     }
 }
