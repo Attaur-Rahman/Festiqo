@@ -12,20 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('password_otps', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->index();
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained()
+                ->cascadeOnDelete();
 
             // Store hashed OTP
             $table->string('otp');
 
             // Number of verification attempts
-            $table->unsignedTinyInteger('attempts')->default(0);
+            $table->unsignedTinyInteger('resend_attempts')->default(0);
 
             // OTP expiration
             $table->timestamp('expires_at');
 
             $table->timestamps();
-            $table->unique('email');
         });
     }
 

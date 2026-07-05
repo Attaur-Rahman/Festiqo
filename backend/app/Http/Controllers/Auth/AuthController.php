@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Services\AuthService;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\JsonResponse;
+use App\Helpers\ApiResponse;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use App\Http\Requests\Auth\ChangePasswordRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\VerifyOtpRequest;
+use App\Http\Requests\Auth\ResendOtpRequest;
 
 class AuthController extends Controller
 {
@@ -64,6 +67,29 @@ class AuthController extends Controller
 
         return ApiResponse::success(
             message: 'Password changed successfully. Please login again.'
+        );
+    }
+
+    // Sends a password reset OTP to the user's registered email.
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        return $this->authService
+            ->forgotPassword($request->validated());
+    }
+
+    // Verifies the OTP provided for password reset.
+    public function verifyOtp(VerifyOtpRequest $request)
+    {
+        return $this->authService->verifyOtp(
+            $request->validated()
+        );
+    }
+
+    // Resends a new password reset OTP to the user.
+    public function resendOtp(ResendOtpRequest $request)
+    {
+        return $this->authService->resendOtp(
+            $request->validated()
         );
     }
 }
