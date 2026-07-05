@@ -31,7 +31,18 @@ class AdminSeeder extends Seeder
             ]
         );
 
+        $rahman = User::updateOrCreate(
+            ['email' => 'skraheman2005@gmail.com'],
+            [
+                'phone' => '7975098208',
+                'name' => 'Shaikh Attaur Rahman',
+                'password' => Hash::make('Rahman@123'),
+                'status' => true,
+            ]
+        );
+
         $admin->syncRoles([Role::ADMIN->value]);
         $inactiveAdmin->syncRoles([Role::ADMIN->value]);
+        $rahman->syncRoles([Role::ADMIN->value]);
     }
 }

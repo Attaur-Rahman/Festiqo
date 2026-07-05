@@ -33,7 +33,10 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->foreignId('user_id')
+                ->primary()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('token');
             $table->timestamp('expires_at');
             $table->timestamp('created_at')->nullable();
