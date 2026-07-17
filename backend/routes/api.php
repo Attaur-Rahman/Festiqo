@@ -1,11 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Auth\AuthController;
-
-// Health check endpoint.
-Route::get('/health', HealthController::class);
 
 Route::prefix('auth')->group(function () {
 
@@ -17,12 +13,12 @@ Route::prefix('auth')->group(function () {
     // ->middleware('throttle:3,10');
 
     // Verify password reset OTP.
-    Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])
-        ->middleware('throttle:10,10');
+    Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+    // ->middleware('throttle:10,10');
 
     // Resend password reset OTP.
-    Route::post('/resend-otp', [AuthController::class, 'resendOtp'])
-        ->middleware('throttle:3,10');
+    Route::post('/resend-otp', [AuthController::class, 'resendOtp']);
+    // ->middleware('throttle:3,10');
 
     // Reset password using a verified reset token.
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
