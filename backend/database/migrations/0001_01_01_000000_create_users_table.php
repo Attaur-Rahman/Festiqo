@@ -13,17 +13,31 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
+            // Basic Information
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone', 15)->unique();
+
+            // Authentication
             $table->string('password');
+
+            // Account Status
+            $table->boolean('status')->index()->default(true);
+            $table->timestamp('last_login_at')->nullable();
+
+            // Laravel
             $table->rememberToken();
             $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->foreignId('user_id')
+                ->primary()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('token');
+            $table->timestamp('expires_at');
             $table->timestamp('created_at')->nullable();
         });
 

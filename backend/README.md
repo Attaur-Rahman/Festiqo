@@ -1,58 +1,331 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FESTIQO Backend API
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://laravel.com/img/logomark.min.svg" alt="Laravel Logo" width="120">
 </p>
 
-## About Laravel
+<p align="center">
+  <strong>FESTIQO</strong><br>
+  A scalable RESTful Backend API for the College Fest Management System.
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+    <img src="https://img.shields.io/badge/Laravel-12-red?style=for-the-badge&logo=laravel">
+    <img src="https://img.shields.io/badge/PHP-8.3-blue?style=for-the-badge&logo=php">
+    <img src="https://img.shields.io/badge/MySQL-Database-orange?style=for-the-badge&logo=mysql">
+    <img src="https://img.shields.io/badge/Sanctum-Authentication-success?style=for-the-badge">
+    <img src="https://img.shields.io/badge/REST-API-blueviolet?style=for-the-badge">
+    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge">
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# 📖 About FESTIQO
 
-## Learning Laravel
+FESTIQO is a modern **College Fest Management System (CFMS)** designed to simplify the management of college festivals through a secure, scalable, and well-structured REST API.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The backend is built using **Laravel 12** following industry best practices, including:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Service Layer Architecture
+- RESTful API Design
+- Role-Based Access Control (RBAC)
+- Standardized API Responses
+- Secure Authentication
+- Clean Code Principles
+- Modular Development
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+The project is designed to support multiple user roles such as:
 
-## Agentic Development
+- Administrator
+- Event Coordinator
+- Volunteer / Student Coordinator
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+# 🚀 Tech Stack
 
-php artisan boost:install
+| Technology        | Purpose              |
+| ----------------- | -------------------- |
+| Laravel 12        | Backend Framework    |
+| PHP 8.3+          | Programming Language |
+| MySQL             | Database             |
+| Laravel Sanctum   | API Authentication   |
+| Spatie Permission | Roles & Permissions  |
+| Laravel Mail      | Email Notifications  |
+| Apidog / Swagger  | API Documentation    |
+| Git & GitHub      | Version Control      |
+
+---
+
+# 🏗 Architecture
+
+The project follows a layered architecture to keep the codebase clean, maintainable, and scalable.
+
+```
+Request
+    │
+    ▼
+Form Request (Validation)
+    │
+    ▼
+Controller
+    │
+    ▼
+Service Layer
+    │
+    ▼
+Model (Database)
+    │
+    ▼
+API Resource
+    │
+    ▼
+Standardized JSON Response
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+# ✨ Current Features
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Authentication
 
-## Code of Conduct
+- Login using Email or Phone
+- Logout
+- Get Authenticated User
+- Forgot Password
+- OTP Verification
+- Resend OTP
+- Reset Password
+- Change Password
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Security Features
 
-## Security Vulnerabilities
+- Laravel Sanctum Authentication
+- Password Hashing
+- Secure Password Reset Tokens
+- OTP Expiration
+- Token Revocation on Logout
+- Centralized Exception Handling
+- Input Validation
+- Standard Error Responses
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+# 🔐 Role-Based Access Control (RBAC)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Authorization is implemented using **Spatie Laravel Permission**.
+
+Current roles:
+
+- Admin
+- Event Coordinator
+- Volunteer / Student Coordinator
+
+Permissions are assigned through roles to ensure secure access to protected resources.
+
+---
+
+# 📦 Planned Modules
+
+The backend is designed to support the following modules:
+
+- Authentication
+- Authorization (RBAC)
+- Dashboard
+- User Management
+- Event Management
+- Event Registration
+- Ticket Verification
+- Quiz Management
+- Leaderboard
+- Notifications
+- Reports & Analytics
+- Settings
+
+---
+
+# 📁 Project Structure
+
+```
+app
+├── Http
+│   ├── Controllers
+│   ├── Requests
+│   └── Resources
+│
+├── Models
+├── Services
+├── Notifications
+├── Enums
+└── Helpers
+
+database
+├── migrations
+├── seeders
+└── factories
+
+routes
+└── api.php
+
+docs
+└── API Documentation
+```
+
+---
+
+# 📡 API Response Format
+
+## Success Response
+
+```json
+{
+    "success": true,
+    "message": "Operation completed successfully.",
+    "data": {}
+}
+```
+
+## Error Response
+
+```json
+{
+    "success": false,
+    "message": "Validation failed.",
+    "errors": {}
+}
+```
+
+This consistent response format is used throughout the API.
+
+---
+
+# 🔑 Authentication
+
+Protected routes require a Bearer Token.
+
+```
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+Authentication is handled using Laravel Sanctum.
+
+---
+
+# 📚 API Documentation
+
+Complete API documentation is available through:
+
+- Apidog
+- Swagger (coming soon)
+
+Documentation includes:
+
+- Endpoint Details
+- Request Examples
+- Response Examples
+- Error Codes
+- Validation Rules
+- Test Cases
+
+---
+
+# ⚙ Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/your-username/festiqo-backend.git
+```
+
+Move into the project
+
+```bash
+cd festiqo-backend
+```
+
+Install dependencies
+
+```bash
+composer install
+```
+
+Copy environment file
+
+```bash
+cp .env.example .env
+```
+
+Generate application key
+
+```bash
+php artisan key:generate
+```
+
+Configure your database inside `.env`
+
+Run migrations
+
+```bash
+php artisan migrate
+```
+
+Seed default data
+
+```bash
+php artisan db:seed
+```
+
+Start the development server
+
+```bash
+php artisan serve
+```
+
+---
+
+# 🧪 Testing
+
+Run feature and unit tests using:
+
+```bash
+php artisan test
+```
+
+---
+
+# 📌 Coding Standards
+
+This project follows:
+
+- PSR-12 Coding Style
+- REST API Best Practices
+- Service Layer Pattern
+- Form Request Validation
+- API Resources
+- Standardized API Responses
+- Centralized Exception Handling
+- Clean Architecture Principles
+
+---
+
+# 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to your branch
+5. Open a Pull Request
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+# 👨‍💻 Developed By
+
+**FESTIQO Team**
+
+A College Fest Management System built to provide a secure, scalable, and modern backend API for managing college events efficiently.
