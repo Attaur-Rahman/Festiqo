@@ -13,6 +13,7 @@ use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\VerifyOtpRequest;
 use App\Http\Requests\Auth\ResendOtpRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 
 class AuthController extends Controller
 {
@@ -91,5 +92,11 @@ class AuthController extends Controller
         return $this->authService->resendOtp(
             $request->validated()
         );
+    }
+
+    // Resets the user's password using a valid reset token.
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        return $this->authService->resetPassword($request->validated());
     }
 }

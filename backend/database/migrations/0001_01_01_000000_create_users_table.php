@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('phone', 15)->unique();
 
             // Authentication
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
             // Account Status

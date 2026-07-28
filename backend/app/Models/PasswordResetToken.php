@@ -6,33 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class PasswordResetToken extends Model
 {
+    protected $primaryKey = 'user_id';
+    protected $keyType = 'int';
+    public $incrementing = false;
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'password_reset_tokens';
-
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'email';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * The data type of the primary key.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
 
     /**
      * Indicates if the model should be timestamped.
@@ -47,7 +30,7 @@ class PasswordResetToken extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'email',
+        'user_id',
         'token',
         'expires_at',
         'created_at',
@@ -62,4 +45,12 @@ class PasswordResetToken extends Model
         'expires_at' => 'datetime',
         'created_at' => 'datetime',
     ];
+
+    /**
+     * Get the user that owns the reset token.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
