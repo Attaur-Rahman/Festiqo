@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 
 class AuthService
 {
+    private const RESET_TOKEN_EXPIRY_MINUTES = 15;
     private const OTP_EXPIRY_MINUTES = 10;
     private const MAX_RESEND_ATTEMPTS = 3;
 
@@ -137,8 +138,8 @@ class AuthService
 
         if (! $user) {
             return ApiResponse::error(
-                message: 'Invalid OTP.',
-                status: 400
+                message: 'No account is associated with the provided identifier.',
+                status: 404
             );
         }
 
@@ -162,9 +163,6 @@ class AuthService
         }
 
         if (! Hash::check($data['otp'], $passwordOtp->otp)) {
-
-            $passwordOtp->increment('attempts');
-
             return ApiResponse::error(
                 message: 'Invalid OTP.',
                 status: 400
@@ -181,7 +179,7 @@ class AuthService
                 ],
                 [
                     'token' => Hash::make($plainToken),
-                    'expires_at' => now()->addMinutes(15),
+                    'expires_at' => now()->addMinutes(self::RESET_TOKEN_EXPIRY_MINUTES),
                     'created_at' => now(),
                 ]
             );
@@ -208,23 +206,28 @@ class AuthService
             ->first();
 
         if (! $user) {
-            return ApiResponse::success(
-                message: 'OTP has been sent.'
+            return ApiResponse::error(
+                message: 'No account is associated with the provided identifier.',
+                status: 404
             );
         }
 
-        $passwordOtp = PasswordOtp::where('user_id', $user->id)->first();
+        $passwordOtp = PasswordOtp::query()
+            ->where('user_id', $user->id)
+            ->first();
 
         if (! $passwordOtp) {
             return ApiResponse::error(
-                message: 'Please request a new password reset.',
+                message: 'No active OTP found. Please request a new OTP using the "Forgot Password" option.',
                 status: 400
             );
         }
 
         if ($passwordOtp->resend_attempts >= self::MAX_RESEND_ATTEMPTS) {
+            $passwordOtp->delete();
+
             return ApiResponse::error(
-                message: 'Maximum OTP resend attempts reached.',
+                message: 'Maximum OTP resend attempts reached. Please use the "Forgot Password" option to generate a new OTP.',
                 status: 429
             );
         }
@@ -232,7 +235,6 @@ class AuthService
         $otp = (string) random_int(100000, 999999);
 
         DB::transaction(function () use ($passwordOtp, $user, $otp) {
-
             $passwordOtp->update([
                 'otp' => Hash::make($otp),
                 'expires_at' => now()->addMinutes(self::OTP_EXPIRY_MINUTES),
@@ -244,6 +246,66 @@ class AuthService
 
         return ApiResponse::success(
             message: 'OTP resent successfully.'
+        );
+    }
+
+    // Resets the user's password using a valid reset token.
+    public function resetPassword(array $data): JsonResponse
+    {
+        $identifier = trim($data['identifier']);
+
+        $user = User::query()
+            ->where('email', $identifier)
+            ->orWhere('phone', $identifier)
+            ->first();
+
+        if (! $user) {
+            return ApiResponse::error(
+                message: 'No account is associated with the provided identifier.',
+                status: 404
+            );
+        }
+
+        $passwordResetToken = PasswordResetToken::query()
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (! $passwordResetToken) {
+            return ApiResponse::error(
+                message: 'Invalid reset token.',
+                status: 400
+            );
+        }
+
+        if ($passwordResetToken->expires_at->isPast()) {
+            $passwordResetToken->delete();
+
+            return ApiResponse::error(
+                message: 'Reset token has expired. Please verify your OTP again.',
+                status: 400
+            );
+        }
+
+        if (! Hash::check($data['reset_token'], $passwordResetToken->token)) {
+            return ApiResponse::error(
+                message: 'Invalid reset token.',
+                status: 400
+            );
+        }
+
+        DB::transaction(function () use ($user, $passwordResetToken, $data) {
+
+            $user->update([
+                'password' => $data['password'],
+            ]);
+
+            $passwordResetToken->delete();
+
+            $user->tokens()->delete();
+        });
+
+        return ApiResponse::success(
+            message: 'Password has been reset successfully.'
         );
     }
 }

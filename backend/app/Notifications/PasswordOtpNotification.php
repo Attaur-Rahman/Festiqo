@@ -38,11 +38,11 @@ class PasswordOtpNotification extends Notification
             ->greeting("Hello, {$notifiable->name}!")
             ->line('You requested a password reset.')
             ->line(new HtmlString(
-                'Your OTP is: <span style="font-weight: bold;">' . e($this->otp) . '</span>'
+                '<p>Your One-Time Password (OTP) is:</p>
+             <h2 style="margin: 16px 0; font-weight: bold;">' . e($this->otp) . '</h2>
+             <p>This OTP will expire in 10 minutes.</p>'
             ))
-            ->line('The OTP expires in 10 minutes.')
-            ->action('Reset Password', config('app.frontend_url') . '/forgot-password')
-            ->line('If you did not request this, please ignore this email.');
+            ->line('If you did not request this password reset, please ignore this email.');
     }
 
     /**
