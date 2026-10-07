@@ -32,6 +32,10 @@ class AuthService
             throw new AuthenticationException('Invalid credentials.');
         }
 
+        if (! $user->hasRole($credentials['role'])) {
+            throw new AuthenticationException('Invalid credentials.');
+        }
+
         if (! $user->status) {
             throw new AccessDeniedHttpException('Your account has been deactivated. Please contact the administrator.');
         }

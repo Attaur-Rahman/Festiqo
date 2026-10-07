@@ -4,6 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LoginRequest extends FormRequest
 {
@@ -25,6 +26,16 @@ class LoginRequest extends FormRequest
         return [
             'login' => ['required', 'string'],
             'password' => ['required', 'string'],
+            'role' => [
+                'required',
+                'string',
+                Rule::in([
+                    'admin',
+                    'event_coordinator',
+                    'student_coordinator',
+                    'student'
+                ]),
+            ],
         ];
     }
 }

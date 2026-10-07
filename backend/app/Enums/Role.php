@@ -6,5 +6,6 @@ enum Role: string
 {
     case ADMIN = 'admin';
     case EVENT_COORDINATOR = 'event_coordinator';
-    case STUDENT_COORDINATOR = 'student_coordinator';
+    case STUDENT = 'student';
+    case STUDENT_COORDINATOR = 'student_coordinator'; // Optional
 }

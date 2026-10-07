@@ -34,4 +34,5 @@ enum Permission: string
 
         // Certificates
     case CERTIFICATE_GENERATE = 'certificate.generate';
+    case CERTIFICATE_DOWNLOAD = 'certificate.download';
 }

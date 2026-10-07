@@ -61,10 +61,21 @@ class UserSeeder extends Seeder
             ]
         );
 
+        $wasay = User::updateOrCreate(
+            ['email' => 'wasay@gmail.com'],
+            [
+                'phone' => '0000123456',
+                'name' => 'Wasay',
+                'password' => Hash::make('Wasay@123'),
+                'status' => true,
+            ]
+        );
+
         $admin->syncRoles([Role::ADMIN->value]);
         $inactiveAdmin->syncRoles([Role::ADMIN->value]);
         $rahman->syncRoles([Role::ADMIN->value]);
         $amaan->syncRoles([Role::EVENT_COORDINATOR->value]);
         $fasi->syncRoles([Role::STUDENT_COORDINATOR->value]);
+        $wasay->syncRoles([Role::STUDENT->value]);
     }
 }

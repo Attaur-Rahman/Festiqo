@@ -51,14 +51,19 @@ return new class extends Migration
             ])->default('draft');
 
             // Audit
-            $table->foreignId('created_by')
-                ->constrained('users')
+            $table->uuid('created_by');
+
+            $table->foreign('created_by')
+                ->references('id')
+                ->on('users')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->foreignId('updated_by')
-                ->nullable()
-                ->constrained('users')
+            $table->uuid('updated_by')->nullable();
+
+            $table->foreign('updated_by')
+                ->references('id')
+                ->on('users')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
 

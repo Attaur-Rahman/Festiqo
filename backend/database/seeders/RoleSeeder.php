@@ -26,6 +26,11 @@ class RoleSeeder extends Seeder
             'guard_name' => 'sanctum',
         ]);
 
+        $student = SpatieRole::firstOrCreate([
+            'name' => Role::STUDENT->value,
+            'guard_name' => 'sanctum',
+        ]);
+
         $studentCoordinator = SpatieRole::firstOrCreate([
             'name' => Role::STUDENT_COORDINATOR->value,
             'guard_name' => 'sanctum',
@@ -58,6 +63,13 @@ class RoleSeeder extends Seeder
 
             PermissionEnum::REGISTRATION_VIEW->value,
             PermissionEnum::REGISTRATION_VERIFY->value,
+        ]);
+
+        // Student permissions
+        $student->syncPermissions([
+            PermissionEnum::DASHBOARD_VIEW->value,
+
+            PermissionEnum::CERTIFICATE_DOWNLOAD->value,
         ]);
     }
 }
