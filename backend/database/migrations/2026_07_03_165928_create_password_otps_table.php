@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('password_otps', function (Blueprint $table) {
-            $table->foreignId('user_id')
-                ->unique()
-                ->constrained()
+            $table->uuid('user_id')->unique();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->cascadeOnDelete();
 
             // Store hashed OTP

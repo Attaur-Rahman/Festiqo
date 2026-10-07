@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +22,26 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('user');
+
         return [
-            'login' => ['required', 'string'],
-            'password' => ['required', 'string'],
-            'role' => [
-                'required',
+            'name' => [
+                'sometimes',
                 'string',
-                Rule::in([
-                    'admin',
-                    'event_coordinator',
-                    'student_coordinator',
-                    'student'
-                ]),
+                'max:255',
+            ],
+
+            'email' => [
+                'sometimes',
+                'email',
+                'max:255',
+                "unique:users,email,$userId",
+            ],
+
+            'phone' => [
+                'sometimes',
+                'digits:10',
+                "unique:users,phone,$userId",
             ],
         ];
     }

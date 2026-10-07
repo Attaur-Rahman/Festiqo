@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +29,10 @@ class AuthService
             ->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+            throw new AuthenticationException('Invalid credentials.');
+        }
+
+        if (! $user->hasRole($credentials['role'])) {
             throw new AuthenticationException('Invalid credentials.');
         }
 

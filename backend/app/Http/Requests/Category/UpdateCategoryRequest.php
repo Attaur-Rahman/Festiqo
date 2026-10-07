@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class UpdateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,23 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => ['required', 'string'],
-            'password' => ['required', 'string'],
-            'role' => [
-                'required',
+            'name' => [
+                'sometimes',
                 'string',
-                Rule::in([
-                    'admin',
-                    'event_coordinator',
-                    'student_coordinator',
-                    'student'
-                ]),
+                'max:255',
+                Rule::unique('categories', 'name')
+                    ->ignore($this->route('category')),
+            ],
+
+            'description' => [
+                'sometimes',
+                'nullable',
+                'string',
+            ],
+
+            'status' => [
+                'sometimes',
+                'boolean',
             ],
         ];
     }

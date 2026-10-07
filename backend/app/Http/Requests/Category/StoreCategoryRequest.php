@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +23,21 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => ['required', 'string'],
-            'password' => ['required', 'string'],
-            'role' => [
+            'name' => [
                 'required',
                 'string',
-                Rule::in([
-                    'admin',
-                    'event_coordinator',
-                    'student_coordinator',
-                    'student'
-                ]),
+                'max:255',
+                'unique:categories,name',
+            ],
+
+            'description' => [
+                'nullable',
+                'string',
+            ],
+
+            'status' => [
+                'required',
+                'boolean',
             ],
         ];
     }

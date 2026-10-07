@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,7 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/api/health',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
 
@@ -51,5 +54,15 @@ return Application::configure(basePath: dirname(__DIR__))
                 message: $e->getMessage() ?: 'Forbidden.',
                 status: 403
             );
+        });
+
+        // Returns a standardized JSON response when a user lacks the required permission.
+        $exceptions->render(function (UnauthorizedException $e, $request) {
+            if ($request->is('api/*')) {
+                return ApiResponse::error(
+                    message: 'You do not have permission to perform this action.',
+                    status: 403
+                );
+            }
         });
     })->create();
