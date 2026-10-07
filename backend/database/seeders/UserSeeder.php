@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class AdminSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     public function run(): void
     {
@@ -41,8 +41,30 @@ class AdminSeeder extends Seeder
             ]
         );
 
+        $amaan = User::updateOrCreate(
+            ['email' => 'amaan@gmail.com'],
+            [
+                'phone' => '0012345678',
+                'name' => 'Amaan Ur Rahman',
+                'password' => Hash::make('Amaan@123'),
+                'status' => true,
+            ]
+        );
+
+        $fasi = User::updateOrCreate(
+            ['email' => 'fasi@gmail.com'],
+            [
+                'phone' => '0001234567',
+                'name' => 'Faseeyuddin',
+                'password' => Hash::make('Fasi@123'),
+                'status' => true,
+            ]
+        );
+
         $admin->syncRoles([Role::ADMIN->value]);
         $inactiveAdmin->syncRoles([Role::ADMIN->value]);
         $rahman->syncRoles([Role::ADMIN->value]);
+        $amaan->syncRoles([Role::EVENT_COORDINATOR->value]);
+        $fasi->syncRoles([Role::STUDENT_COORDINATOR->value]);
     }
 }

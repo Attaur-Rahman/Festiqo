@@ -3,15 +3,30 @@
 namespace App\Helpers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiResponse
 {
-    // Returns a standardized JSON response for successful API requests.
+    /**
+     * Returns a standardized JSON response for successful API requests.
+     */
     public static function success(
         mixed $data = null,
         string $message = 'Success',
         int $status = 200
     ): JsonResponse {
+
+        // Handle paginated resource collections
+        if ($data instanceof AnonymousResourceCollection) {
+
+            $response = $data->response()->getData(true);
+
+            $response['success'] = true;
+            $response['message'] = $message;
+
+            return response()->json($response, $status);
+        }
+
         $response = [
             'success' => true,
             'message' => $message,
@@ -24,12 +39,15 @@ class ApiResponse
         return response()->json($response, $status);
     }
 
-    // Returns a standardized JSON response for failed API requests.
+    /**
+     * Returns a standardized JSON response for failed API requests.
+     */
     public static function error(
         string $message,
         int $status = 400,
         ?array $errors = null
     ): JsonResponse {
+
         $response = [
             'success' => false,
             'message' => $message,
